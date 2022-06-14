@@ -1,17 +1,10 @@
 import * as React from "react"
 import "./Chip.css"
-import { useState } from 'react';
 
-export function Chip({ label = "", isActive = false }) {
+
+export function Chip({ label = "", isActive = false, onClick = () => {} }) {
+  /*console.log(isActive);*/
   
-  const pickCategory = () => {
-    console.log("yay")
-  
-    setAct(true)
-    /*isActive = act*/
-  
-    
-  }
   let buttonClassName;
   if (isActive == false){
     
@@ -23,8 +16,8 @@ export function Chip({ label = "", isActive = false }) {
 
   return (
 
-    <button className={buttonClassName}>
-      <p className="label"  onClick={pickCategory}>{label}</p>
+    <button className={buttonClassName} onClick={onClick}>
+      <p className="label"  >{label}</p>
       <span className="close" role="button">{`X`}</span>
     </button>
   )

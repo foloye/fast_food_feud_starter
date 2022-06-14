@@ -3,7 +3,10 @@ import * as React from "react"
 import Header from "./components/Header/Header"
 import Instructions from "./components/Instructions/Instructions"
 import Chip from "./components/Chip/Chip"
+import NutritionalLabel from "./components/NutritionalLabel/NutritionalLabel"
+
 import { useState } from 'react';
+
 import { createDataSet } from "./data/dataset"
 import "./App.css"
 
@@ -25,16 +28,42 @@ export const appInfo = {
 const { data, categories, restaurants } = createDataSet()
 
 
+
 export function App() {
+  const [actCat, setCategory] = useState("");
+  const [restAct, setRestAct] = useState("");
+  const [itemAct, setItemAct] = useState("");
+  
+  const setActiveCat = (category) => {
+    setCategory(category);
+  }
+  const setActiveRest = (place) => {
+    setRestAct(place);
+  }
+  const setItemRest = (item) => {
+    setItemAct(item);
+  }
+  
+  
+  
+  const currentMenuItems = data.filter((menuItem) => {
+    if (menuItem.food_category == actCat && restAct == menuItem.restaurant) {
+      return true;
+    }
+      return false;
+  });
+
+  
+
   return (
     <main className="App">
       {/* CATEGORIES COLUMN */}
       <div className="CategoriesColumn col">
         <div className="categories options">
           <h2 className="title">Categories</h2>
-          {categories.map((category) => (
-            <Chip label = {category} />
-            /*  <p categories={category} key={category}>{category}</p>*/
+          {categories.map((category, idx) => (
+            <Chip label = {category} key={idx} isActive = {category === actCat} onClick = {() => {setActiveCat(category)}}/>
+            
           ))}
 
           
@@ -49,24 +78,30 @@ export function App() {
         {/* RESTAURANTS ROW */}
         <div className="RestaurantsRow">
           <h2 className="title">Restaurants</h2>
-          <div className="restaurants options">{restaurants.map((place) => (
-            <Chip label = {place} />
+          <div className="restaurants options">{restaurants.map((place, idx) => (
+            <Chip label = {place} key={idx} isActive = {place === restAct} onClick = {() => {setActiveRest(place)}}/>
             /*  <p categories={place} key={place}>{place}</p>*/
           ))}</div>
         </div>
 
-        {/* INSTRUCTIONS GO HERE */}
+        {/* INSTRUCTIONS GO HERE appInfo.instructions.start */}
+        
         <Instructions instructions = {appInfo.instructions.start}/>
 
         {/* MENU DISPLAY */}
         <div className="MenuDisplay display">
           <div className="MenuItemButtons menu-items">
             <h2 className="title">Menu Items</h2>
-            {/* YOUR CODE HERE */}
+            {currentMenuItems.map((item, idx) => (
+              <Chip label = {item.item_name} key={idx} isActive = {item.item_name === itemAct.item_name} onClick = {() => {setItemRest(item)}}/>
+            ))}
           </div>
 
           {/* NUTRITION FACTS */}
-          <div className="NutritionFacts nutrition-facts">{/* YOUR CODE HERE */}</div>
+          <div className="NutritionFacts nutrition-facts">
+            {/* YOUR CODE HERE */}
+            <NutritionalLabel  item={itemAct}/>
+          </div>
         </div>
 
         <div className="data-sources">
